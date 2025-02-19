@@ -32,7 +32,24 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/invoices", express.static("invoices"));
 
 // Connecting with front end ie, React
-app.use(cors( {origin: 'http://localhost:5174', credentials:true } ) )
+
+const allowedOrigins = [
+  'http://localhost:5173', // Local dev
+  process.env.FRONTEND_URL || 'https://your-app.vercel.app' // Vercel or production URL
+];
+
+// CORS configuration
+app.use(cors({
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+
 
 
 app.use('/api/auth',adminRoute)
