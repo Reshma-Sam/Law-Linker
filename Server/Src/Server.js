@@ -51,6 +51,11 @@ app.use(cors({
 }));
 
 
+// Test route
+app.get("/", (req, res) => {
+    res.send("Server is running!!!");
+});
+
 
 app.use('/api/auth',adminRoute)
 app.use('/api/advocate',advocateRoute)  // Route for both Jr.Advocate and Advocate
