@@ -73,7 +73,7 @@ function App() {
   const getLoggedInAdvocateEmail = () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      console.warn("No token found in localStorage.");
+      // console.warn("No token found in localStorage.");
       return null;
     }
 
@@ -101,7 +101,7 @@ function App() {
   const loggedInUserEmail = getLoggedInAdvocateEmail()
 
   if (!loggedInUserEmail) {
-    console.warn("User email not found!");
+    console.log("User email not found!");
   } else {
     console.log("Logged-in User Email:", loggedInUserEmail);
   }
