@@ -46,7 +46,7 @@ const AdminJrAdvocates = ({ handleShowCreateJrAdvocateAdmin }) => {
     }, []);
 
     const handleViewProfile = (usertype, id) => {
-        navigate(`/profile-advocate/${usertype}/${id}`);
+        navigate(`/profile/other/${usertype}/${id}`);
     };
 
     // Delete Jr. Advocate
@@ -99,7 +99,7 @@ const AdminJrAdvocates = ({ handleShowCreateJrAdvocateAdmin }) => {
                             <Card className="shadow">
                                 <Card.Img
                                     variant="top"
-                                    src={jrAdvocate.profilePicture ? `${BASE_URL}${jrAdvocate.profilePicture}` : "https://dummyimage.com/200"}
+                                    src={jrAdvocate.profilePicture || "https://dummyimage.com/200"}
                                     alt="Profile"
                                     style={{ height: "150px", objectFit: "cover" }}
                                 />

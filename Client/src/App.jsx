@@ -30,14 +30,11 @@ import AdminAdvocates from './Pages/AdminDashboard/AdminAdvocates'
 import AdminJrAdvocated from './Pages/AdminDashboard/AdminJrAdvocated'
 import AdminClients from './Pages/AdminDashboard/AdminClients'
 import AdminCases from './Pages/AdminDashboard/AdminCases'
-import Advocate from './Pages/AdvocateDashboard/Advocate'
 import ApprovalCase from './Pages/AdvocateDashboard/ClientList'
 import CaseList from './Pages/AdvocateDashboard/CaseList'
 import CreateCase from './Pages/AdvocateDashboard/CreateCase'
 import CreateAdvocateAdmin from './Pages/AdminDashboard/CreateAdvocateAdmin'
 import CreateJrAdvocateAdmin from './Pages/AdminDashboard/CreateJrAdvocateAdmin'
-import ProfileAdvocate from './Pages/ProfileAdvocate'
-import CustomAlert from './Components/CustomAlert'
 import CaseProfile from './Pages/CaseProfile'
 import ClientProfile from './Components/ClientProfile'
 import UpdateCaseForm from './Pages/AdvocateDashboard/UpdateCaseForm'
@@ -240,7 +237,7 @@ function App() {
               <Route path="/pending-advocate" element={<ApprovalAdvocates />} />
 
               {/* Shared Advocate & Jr. Advocate Routes */}
-              <Route path="/advocate-list" element={<Advocate />} />
+              {/* <Route path="/advocate-list" element={<Advocate />} />/     */}
               <Route path="/create-case" element={<CreateCase />} />
               <Route path="/case-list" element={<CaseList />} />
               <Route path="/client-list" element={<ClientList advocateEmail={loggedInUserEmail}/>} />

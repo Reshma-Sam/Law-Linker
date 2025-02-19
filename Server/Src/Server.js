@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/invoices", express.static("invoices"));
 
 // Connecting with front end ie, React
-app.use(cors( {origin: 'http://localhost:5173', credentials:true } ) )
+app.use(cors( {origin: 'http://localhost:5174', credentials:true } ) )
 
 
 app.use('/api/auth',adminRoute)
