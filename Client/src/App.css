@@ -1,0 +1,1070 @@
+/* Universal Reset */
+/* --------------- */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    /* Keep horizontal scrolling disabled */
+    overflow-y: auto;
+    /* Allow vertical scrolling */
+    /* padding-top:125px !important; */
+    margin: 0;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Navbar */
+/* -------- */
+
+.navbar {
+    background-color: #e3e0d9;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 125px;
+    display: flex;
+    justify-content: left;
+    z-index: 1050;
+    padding: 1rem;
+    position: relative;
+    /* position: fixed !important; */
+    /* pseudo-element is positioned relative to the navbar */
+}
+
+.navbar::after {
+    /* Pseudo-element for the bottom line */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 30%;
+    /* Start the line from the middle */
+    width: 70%;
+    /* Make the line span 70% the width */
+    height: 2px;
+    background-color: #999898;
+    box-shadow: 0px 4px 8px rgba(12, 12, 12, 0.3);
+}
+
+.navbar .navbar-brand {
+    /*Logo position adjustments */
+    position: absolute;
+    /* Absolute positioning */
+    left: 15px;
+    /* Align to the left */
+    top: 50%;
+    padding-top: 10px;
+    /* Vertically center it */
+    transform: translateY(-50%);
+    /* Adjust to center vertically */
+}
+
+
+.nav-links a {
+    position: relative;
+    font-size: 18px;
+    color: black;
+    font-weight: bold;
+    margin-right: 40px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 5px;
+    background: black;
+    top: 100%;
+    left: 0;
+    transition: width 0.3s ease
+}
+
+.navbar a:hover::before {
+    width: 100%;
+}
+
+.loginButton {
+    all: unset;
+    background-color: rgb(15, 0, 0) !important;
+    border-radius: 18px 18px 18px 18px !important;
+    color: rgb(246, 241, 241) !important;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 85px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    padding: 5px 15px !important;
+    border: black !important;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.login-padding {
+    padding-bottom: 30px;
+}
+
+.click-padding {
+    padding-bottom: 40px;
+}
+
+.loginButton:hover {
+    background-color: rgb(17, 1, 1) !important;
+    color: aliceblue !important;
+    transform: scale(1.1);
+}
+
+.no-hover {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+.no-hover a {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+.no-hover img {
+    display: block;
+    cursor: pointer;
+}
+
+.nav-links .active-link {
+    color: #3c3b3b !important;
+    /*Active Page Effect */
+    font-weight: bold;
+}
+
+.nav-links .active-link::before {
+    width: 100%;
+}
+
+/* Landing Page Styles */
+/* -------------------- */
+
+body {
+    margin-top: 70px;
+    /* To avoid overlap with fixed navbar */
+    background-image: url('C:/Enrti React/Advocate Automated/Client/src/Assets/image.jpg');
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    min-height: 85vh;
+    width: 100%;
+    object-fit: cover !important;
+}
+
+.landing-page {
+    min-height: 100vh;
+    position: absolute;
+    top: 200px;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.default-page {
+    background: none !important;
+}
+
+.landing-page h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.landing-page p {
+    color: black;
+}
+
+.content {
+    max-width: 400px;
+    padding: 40px;
+    text-align: left;
+    padding-bottom: 269px;
+}
+
+/* Modal Pages */
+/* ----------- */
+
+.modal {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0
+}
+
+.modal-dialog {
+    margin: 0 !important;
+    /* Removes the margin */
+}
+
+
+.modal-header {
+    background-color: #d2cfca;
+    padding-top: 0;
+    margin: 0;
+    border-top-left-radius: 15px;
+    /* Curve top-left */
+    border-top-right-radius: 15px;
+    /* Curve top-right */
+}
+
+.login-heading {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    font-weight: 500 !important;
+}
+
+.modal-form {
+    padding-bottom: 40px;
+}
+
+.modal-content {
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.modal-body select {
+    z-index: 1050;
+    background-color: #d7d5cd !important;
+    border: 1px solid #000305;
+    color: rgb(11, 2, 2);
+    padding: 10px;
+    border-radius: 20px;
+    height: 45px;
+}
+
+.modal-body select:focus {
+    background-color: #b0aba3 !important;
+    border-color: #0b0101 !important;
+    outline: none;
+}
+
+
+.modal-body input {
+    background-color: #d7d5cd !important;
+    border: 1px solid #000305;
+    color: rgb(11, 2, 2);
+    padding: 10px;
+    border-radius: 20px 20px 20px 20px;
+    height: 35px;
+}
+
+.modal-body input:focus {
+    background-color: #b0aba3 !important;
+    border-color: #0b0101 !important;
+    outline: none;
+}
+
+.modal-dialog {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    max-width: 500px;
+    width: 90%;
+}
+
+.custom-modal .modal-content {
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    width: 800px;
+}
+
+.forgot-password {
+    display: block;
+    text-align: right;
+    margin-top: 10px;
+    /* Adjust this as needed */
+}
+
+/* Modal for Signup */
+/* ----------------- */
+
+.modal-body-scroll {
+    max-height: 600px; /* Adjust as needed */
+    overflow-y: auto;
+    padding-right: 10px; /* Optional: To avoid content shift due to scrollbar */
+}
+
+.signup-heading {
+    padding-top: 20px;
+    font-weight: 500 !important;
+}
+
+.custom-modal-signup .modal-content {
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    width: 800px;
+    height: 738px;
+}
+
+.forgot-password-signup {
+    display: block;
+    text-align: right;
+}
+
+.signup-click-padding {
+    padding-top: 10px;
+}
+
+.custom-modal-signup {
+    max-width: 400px;
+    /* Further reducing the width of the modal */
+    max-height: 80vh;
+    /* Restrict modal height */
+    padding: 0 10px;
+    /* Adding padding to prevent overflow */
+}
+
+.form-control-sm {
+    font-size: 0.75rem;
+    /* Making the font size even smaller */
+    padding: 0.25rem 0.5rem;
+    /* Reducing the padding */
+}
+
+.modal-header,
+.modal-body {
+    padding: 10px;
+    /* Reducing the padding inside modal */
+}
+
+.signup-heading {
+    font-size: 1rem;
+    /* Reduce the title font size */
+}
+
+
+/* About Section Styling */
+/* ---------------------- */
+
+.aboutContact {
+    background-color: #e3e0d9;
+    padding: 50px 0;
+    flex: 1;
+    /* Pushes the footer to the bottom */
+}
+
+.aboutSection {
+    max-width: 1200px;
+    margin: auto;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.aboutSection h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #222;
+}
+
+/* About Cards */
+/* ------------- */
+.aboutCards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* Card Styling */
+.card {
+    background: #e3e0d9;
+    /* Soft neutral background */
+    border-radius: 15px;
+    padding: 25px;
+    flex: 1 1 300px;
+    /* Makes it responsive without media queries */
+    max-width: 350px;
+    /* Prevents overly wide cards */
+    min-width: 250px;
+    /* Prevents shrinking too much */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    /* Depth effect */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid black;
+}
+
+/* Card Hover Effect */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* Title Styling */
+.card h2 {
+    font-size: 1.6rem;
+    color: black;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Text Styling */
+.card p {
+    font-size: 1rem;
+    color: black;
+    margin-top: 10px;
+}
+
+/* Contact Section */
+/* ---------------- */
+
+.contactSection {
+    width: 100%;
+    /* Full-width */
+    background-color: black;
+    /* Elegant black background */
+    color: #d7d5cd;
+    /* Light beige text */
+    padding: 60px 10%;
+    text-align: center;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+    border-top: 3px solid #d7d5cd;
+    /* Subtle top border */
+    margin-bottom: 50px;
+}
+
+.contactSection h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #d7d5cd;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.contactInfo {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.contactInfo p {
+    font-size: 20px;
+    color: #d7d5cd;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.contact-highlight {
+    font-size: 22px;
+    font-weight: bold;
+    color: #ffcc00;
+    /* Golden yellow highlight */
+    margin-top: 20px;
+    text-transform: uppercase;
+}
+
+/* contact Form */
+/* ------------- */
+.contactForm {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.contactForm .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.contactForm .form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #000305 !important;
+}
+
+.contactForm input {
+    font-size: 16px;
+    background-color: #d7d5cd !important;
+    border: 1px solid #000305;
+    color: rgb(11, 2, 2);
+    padding: 10px;
+    border-radius: 20px 20px 20px 20px;
+    height: 35px;
+}
+
+.contactForm textarea {
+    font-size: 16px;
+    background-color: #d7d5cd !important;
+    border: 1px solid #000305;
+    color: rgb(11, 2, 2);
+    padding: 10px;
+    border-radius: 20px;
+    height: 100px;
+    /* Adjust the height as needed */
+    resize: none;
+    /* Prevents resizing, optional */
+}
+
+
+.contactForm .nameFields {
+    display: flex;
+    gap: 15px;
+}
+
+.contactForm .contactButton {
+    background-color: rgb(15, 0, 0);
+    border-radius: 18px;
+    color: rgb(246, 241, 241);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+}
+
+/* Footer Styles */
+/* ------- */
+
+.footer {
+    background-color: black;
+    color: #e3e0d9;
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: auto;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 20px;
+}
+
+.footer-section h4 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin: 5px 0;
+}
+
+.footer-section ul li a {
+    color: #e3e0d9;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.footer-section ul li a:hover {
+    color: #ccc;
+}
+
+.footer-bottom {
+    margin-top: 20px;
+    border-top: 1px solid #e3e0d9;
+    padding-top: 10px;
+}
+
+/* Find A Lawyer*/
+/* ---------- -- */
+
+.page-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.category-card {
+    background-color:black !important;
+    color:  #e3e0d9 !important;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.category-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.spinner-border {
+    margin-left: 10px;
+}
+
+/* Advocate List Page */
+/* ------------------- */
+  
+  .long-card {
+    background:#333 !important;
+    color:#d2cfca !important;
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+  }
+  
+  .long-card:hover {
+    transform: scale(1.02);
+  }
+  
+  .profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-right: 20px;
+    border: 3px solid black;
+  }
+  
+  .advocate-details {
+    flex-grow: 1;
+    text-align: left;
+  }
+  
+  .advocate-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 10px;
+  }
+  
+  .advocate-detail {
+    font-size: 1rem;
+    color: black;
+    background: transparent;
+    border: none;
+  }
+  
+  /* Advocate Profile */
+  /* ----------------- */
+
+  .profile-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #333;
+    color: #d2cfca;
+  }
+  
+  .profile-header {
+    margin-bottom: 20px;
+  }
+  
+  .profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .profile-details {
+    text-align: left;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+  }
+  
+  .profile-details p {
+    margin: 8px 0;
+  }
+  
+  .profile-buttons {
+    margin-top: 20px;
+  }
+
+  /* Advocate Contact from  */
+  /* ----------------------- */
+
+  .contactAdvocateForm {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+.AdminCreationButton {
+    all: unset;
+    background-color: rgb(15, 0, 0) !important;
+    border-radius: 18px 18px 18px 18px !important;
+    color: rgb(246, 241, 241) !important;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 200px !important;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    padding: 5px 15px !important;
+    border: black !important;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.AdminCreationButton:hover {
+    background-color: rgb(17, 1, 1) !important;
+    color: aliceblue !important;
+    transform: scale(1.1);
+}
+
+.searchButton {
+    all: unset;
+    background-color: rgb(15, 0, 0) !important;
+    border-radius: 18px 18px 18px 18px !important;
+    color: rgb(246, 241, 241) !important;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 135px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    padding: 5px 15px !important;
+    border: black !important;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.searchButton:hover {
+    background-color: rgb(17, 1, 1) !important;
+    color: aliceblue !important;
+    transform: scale(1.1);
+}
+
+/* Custom alert box */
+/* ------------------ */
+
+.alert-header {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alert-message {
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.close-btn:hover {
+    transform: scale(1.2);
+}
+
+.custom-alert {
+    background-color: black;
+    color: #d7d5cd;
+    border: 2px solid #d7d5cd;
+    border-radius: 12px;
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    transition: all 0.5s ease;
+    width:600px;
+}
+
+.custom-alert:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.alert-button {
+    background-color: #333;
+    color: #d2cfca;
+    width:50px;
+    height:35px ;
+    border: 2px solid #d7d5cd;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.alert-button:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.top-center-alert {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+}
+
+.modal-top-center-alert {
+    position: fixed; /* Change from absolute to fixed */
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050; /* Bootstrap modals have a z-index of 1040 */
+}
+
+/* Case Form */
+/* ---------- */
+
+.caseForm {
+    background-color: #000;
+    color: #e3e0d9;
+    border-radius: 8px;
+    width:800px;
+    border: 2px solid #d7d5cd;
+}
+.caseButton {
+    background-color:  #e3e0d9;
+    color:black;
+    width: 150px;
+    height: 30px;
+    border: 2px solid #d7d5cd;
+    font-weight: bold;
+    border-radius: 5px;
+}
+.caseButton:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+/* CaseList */
+/* -------- */
+
+.caseList {
+    background-color:  #d7d5cd;
+    color:black;
+    border-radius: 5px;
+    border: 2px solid black;
+    padding: 30px;
+}
+
+.case {
+    border-radius: 5px;
+    border: 6px solid black;
+    padding: 10px;
+}
+
+.case:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+/* ClientProfile.css */
+/* ------------------ */
+.client-profile {
+    background-color: #333;
+    color: #d2cfca;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    margin: 20px auto;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.profile-picture img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #d2cfca;
+    margin-bottom: 15px;
+}
+
+.profile-details h2 {
+    margin-bottom: 15px;
+}
+
+.profile-details p {
+    margin: 5px 0;
+    font-size: 1.1em;
+}
+
+/* UpdateCaseForm.css */
+/* -------------------- */
+
+.update-case-form {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #333,#d2cfca );
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.update-case-form h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color:black;
+}
+
+.update-case-form .form-group {
+    margin-bottom: 20px;
+}
+
+.update-case-form .form-label {
+    font-weight: 600;
+    color: #d2cfca;
+}
+
+.update-case-form .form-control {
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.update-case-form .form-control:focus {
+    border-color: black;
+    box-shadow: 0 0 5px black;
+}
+
+.update-case-form .form-check-label {
+    color: #004d40;
+}
+
+.update-case-form .btn-primary {
+    background-color: black;
+    border: none;
+    padding: 12px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    color: #d2cfca;
+}
+
+.update-case-form .btn-primary:hover {
+    background-color: black;
+}
+
+.update-case-form .alert {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+/* Optional: Center the spinner */
+.update-case-form .spinner-border {
+    display: block;
+    margin: 20px auto;
+}
+
+.aprovalButton {
+    all: unset;
+    background-color: rgb(15, 0, 0) !important;
+    border-radius: 18px 18px 18px 18px !important;
+    color: rgb(246, 241, 241) !important;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 85px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    padding: 5px 15px !important;
+    border: black !important;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.aprovalButton:hover {
+    background-color: rgb(17, 1, 1) !important;
+    color: rgb(17, 145, 17) !important;
+    transform: scale(1.1);
+}
+
+.rejectionButton {
+    all: unset;
+    background-color: rgb(15, 0, 0) !important;
+    border-radius: 18px 18px 18px 18px !important;
+    color: rgb(246, 241, 241) !important;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 85px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    padding: 5px 15px !important;
+    border: black !important;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.rejectionButton:hover {
+    background-color: rgb(17, 1, 1) !important;
+    color: red !important;
+    transform: scale(1.1);
+}
