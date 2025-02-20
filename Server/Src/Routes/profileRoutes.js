@@ -15,5 +15,8 @@ router.get('/:userType/:id', authenticateToken,profileController.getProfile)
 // GET : Route for getting all other users profile view
 //------------------------------------------------
 router.get('/other/:userType/:id',profileController.getOtherUserProfile)
+// Update Client Profile
+//-----------------------
+router.put('/update/:usertype/:id',authenticateToken,profileController.updateUserProfile)
 
 module.exports = router

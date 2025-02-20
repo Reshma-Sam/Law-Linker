@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Button, Card, Container, Row, Col } from "react-bootstrap";
+import { Button, Form, Card, Container, Row, Col } from "react-bootstrap";
 import CustomAlert from "../../Components/CustomAlert";
 
 const AdminJrAdvocates = ({ handleShowCreateJrAdvocateAdmin }) => {
-    const apiUrl = import.meta.env.VITE_API_URL
+    const apiUrl = import.meta.env.VITE_API_URL;
     const [jrAdvocates, setJrAdvocates] = useState([]);
-    const navigate = useNavigate()
+    const [filteredAdvocates, setFilteredAdvocates] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const navigate = useNavigate();
     const [alertMessage, setAlertMessage] = useState("");
 
     // Function to show the custom alert
@@ -15,7 +17,6 @@ const AdminJrAdvocates = ({ handleShowCreateJrAdvocateAdmin }) => {
         setAlertMessage(message);
         setTimeout(() => setAlertMessage(""), 3000);
     };
-
 
     // Fetch Jr. Advocates from backend
     useEffect(() => {
@@ -27,23 +28,39 @@ const AdminJrAdvocates = ({ handleShowCreateJrAdvocateAdmin }) => {
                     },
                 });
 
-                console.log("API Response:", response.data); // Debugging
-
                 if (response.data.jradvocates && Array.isArray(response.data.jradvocates)) {
-                    setJrAdvocates(response.data.jradvocates); // Use correct property name
+                    setJrAdvocates(response.data.jradvocates);
+                    setFilteredAdvocates(response.data.jradvocates); // Initialize filtered list
                 } else {
-                    triggerAlert("Unexpected API response format:", response.data);
+                    triggerAlert("Unexpected API response format.");
                     setJrAdvocates([]);
                 }
-
             } catch (error) {
-                triggerAlert("Error fetching Jr. Advocates:", error);
+                triggerAlert("Error fetching Jr. Advocates.");
                 setJrAdvocates([]);
             }
         };
 
         fetchJrAdvocates();
     }, []);
+
+    // Multi-field search logic
+    useEffect(() => {
+        const filtered = jrAdvocates.filter((advocate) => {
+            const query = searchQuery.toLowerCase();
+            return (
+                advocate.firstname?.toLowerCase().includes(query) ||
+                advocate.lastname?.toLowerCase().includes(query) ||
+                advocate.email?.toLowerCase().includes(query) ||
+                advocate.mobile?.toString().includes(query) ||
+                advocate.state?.toLowerCase().includes(query) ||
+                advocate.district?.toLowerCase().includes(query) ||
+                advocate.specialization?.toLowerCase().includes(query)
+            );
+        });
+
+        setFilteredAdvocates(filtered);
+    }, [searchQuery, jrAdvocates]);
 
     const handleViewProfile = (usertype, id) => {
         navigate(`/profile/other/${usertype}/${id}`);
@@ -54,7 +71,6 @@ const AdminJrAdvocates = ({ handleShowCreateJrAdvocateAdmin }) => {
         const token = localStorage.getItem("token");
 
         if (!token) {
-            console.error("No authentication token found");
             triggerAlert("You are not authorized. Please log in again.");
             return;
         }
@@ -63,9 +79,7 @@ const AdminJrAdvocates = ({ handleShowCreateJrAdvocateAdmin }) => {
 
         try {
             const response = await axios.delete(`${apiUrl}/auth/JrAdvocate/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             if (response.status === 200) {
@@ -73,12 +87,9 @@ const AdminJrAdvocates = ({ handleShowCreateJrAdvocateAdmin }) => {
                 setJrAdvocates((prev) => prev.filter((jrAdvocate) => jrAdvocate._id !== id));
             }
         } catch (error) {
-            triggerAlert("Error deleting Jr. Advocate:", error);
-            alert(error.response?.data?.message || "Failed to delete Jr. Advocate");
+            triggerAlert(error.response?.data?.message || "Failed to delete Jr. Advocate");
         }
     };
-
-    const BASE_URL = "http://localhost:5500"
 
     return (
         <div className="position-relative">
@@ -88,13 +99,23 @@ const AdminJrAdvocates = ({ handleShowCreateJrAdvocateAdmin }) => {
             <Container>
                 <h2 className="text-center mt-4 mb-4">Jr. Advocate List</h2>
                 <center>
-                    <Button className="mb-5 AdminCreationButton" onClick={handleShowCreateJrAdvocateAdmin}>
+                    <Button className="mb-3 AdminCreationButton" onClick={handleShowCreateJrAdvocateAdmin}>
                         Create Jr. Advocate
                     </Button>
                 </center>
 
+                {/* Search Input */}
+                <Form.Group className="mb-4">
+                    <Form.Control
+                        type="text"
+                        placeholder="Search by name, email, mobile, state, district, etc."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </Form.Group>
+
                 <Row>
-                    {jrAdvocates.map((jrAdvocate) => (
+                    {filteredAdvocates.map((jrAdvocate) => (
                         <Col md={4} key={jrAdvocate._id} className="mb-3">
                             <Card className="shadow">
                                 <Card.Img
@@ -122,6 +143,7 @@ const AdminJrAdvocates = ({ handleShowCreateJrAdvocateAdmin }) => {
                             </Card>
                         </Col>
                     ))}
+                    {filteredAdvocates.length === 0 && <p className="text-center">No Jr. Advocates found.</p>}
                 </Row>
             </Container>
         </div>

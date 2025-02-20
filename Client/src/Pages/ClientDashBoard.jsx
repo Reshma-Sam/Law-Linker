@@ -4,13 +4,12 @@ import { Spinner, Form, Button, Row, Col, Card } from "react-bootstrap";
 import CustomAlert from "../Components/CustomAlert";
 
 const ClientDashboard = () => {
-    const apiUrl = import.meta.env.VITE_API_URL
+    const apiUrl = import.meta.env.VITE_API_URL;
     const [client, setClient] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [alertMessage, setAlertMessage] = useState("");
 
-    // Function to show the custom alert
     const triggerAlert = (message) => {
         setAlertMessage(message);
         setTimeout(() => setAlertMessage(""), 3000);
@@ -26,24 +25,19 @@ const ClientDashboard = () => {
         email: "",
         state: "",
         district: "",
-        username: "",
-        password: "",
-        confirmPassword: "",
         advocateEmail: "",
+        username: ""
     });
 
     const [isEditing, setIsEditing] = useState({
-        profilePicture: false,
         clientname: false,
         mobile: false,
-        email: false,
         state: false,
         district: false,
-        username: false,
-        password: false,
-        confirmPassword: false,
         advocateEmail: false,
+        username: false
     });
+    const [showFileInput, setShowFileInput] = useState(false);
 
     useEffect(() => {
         if (!userType || !id) {
@@ -51,42 +45,49 @@ const ClientDashboard = () => {
             setLoading(false);
             return;
         }
-
-        const fetchProfile = async () => {
-            const token = localStorage.getItem("token");
-            try {
-                const response = await axios.get(
-                    `${apiUrl}/profile/${userType}/${id}`,
-                    { headers: { Authorization: `Bearer ${token}` } }
-                );
-
-                if (response.data.success) {
-                    setClient(response.data.user);
-                    setFormData(response.data.user);
-                } else {
-                    triggerAlert("Failed to load profile: " + response.data.message);
-                }
-            } catch (err) {
-                console.error("Error fetching profile:", err);
-                triggerAlert("Failed to load profile");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchProfile();
     }, [userType, id]);
+
+    const fetchProfile = async () => {
+        const token = localStorage.getItem("token");
+        try {
+            const response = await axios.get(
+                `${apiUrl}/profile/${userType}/${id}`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            if (response.data.success) {
+                setClient(response.data.user);
+                setFormData({
+                    profilePicture: response.data.user.profilePicture || "",
+                    clientname: response.data.user.clientname || "",
+                    mobile: response.data.user.mobile || "",
+                    state: response.data.user.state || "",
+                    district: response.data.user.district || "",
+                    username: response.data.user.username || "",
+                    email: response.data.user.email || "",
+                    advocateEmail: response.data.user.advocateEmail || ""
+                });
+            } else {
+                triggerAlert("Failed to load profile: " + response.data.message);
+            }
+        } catch (err) {
+            console.error("Error fetching profile:", err);
+            triggerAlert("Failed to load profile");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleFileChange = (e) => {
-        setFormData({ ...formData, profilePicture: e.target.files[0] });
-    };
-
-    const toggleEdit = (field) => {
-        setIsEditing((prev) => ({ ...prev, [field]: !prev[field] }));
+        const file = e.target.files[0];
+        if (file) {
+            setFormData({ ...formData, profilePicture: file });
+        }
     };
 
     const handleProfileUpload = async () => {
@@ -113,17 +114,7 @@ const ClientDashboard = () => {
 
             if (response.data.success) {
                 triggerAlert("Profile picture uploaded successfully!");
-
-                // Fetch updated profile from the backend
-                const profileResponse = await axios.get(
-                    `${apiUrl}/profile/${userType}/${id}`,
-                    { headers: { Authorization: `Bearer ${token}` } }
-                );
-
-                if (profileResponse.data.success) {
-                    setFormData({ ...profileResponse.data.user });
-                    setClient(profileResponse.data.user);
-                }
+                fetchProfile();
             } else {
                 triggerAlert("Failed to upload profile picture.");
             }
@@ -133,30 +124,40 @@ const ClientDashboard = () => {
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const token = localStorage.getItem("token");
+    const handleToggleEdit = async (field) => {
+        if (isEditing[field]) {
+            const token = localStorage.getItem("token");
 
-        try {
-            const response = await axios.put(
-                `${apiUrl}/profile/${userType}/${id}`,
-                { ...formData },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
+            // Prepare data, preserving existing profilePicture if not updated
+            const updateData = { [field]: formData[field] };
+
+            try {
+                const response = await axios.put(
+                    `${apiUrl}/profile/update/${userType}/${id}`,
+                    updateData,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                if (response.data.success) {
+                    triggerAlert(`${field} updated successfully!`);
+
+                    // Update client state without resetting profilePicture
+                    setClient((prevClient) => ({
+                        ...prevClient,
+                        [field]: formData[field],
+                    }));
+                } else {
+                    triggerAlert(`Failed to update ${field}: ${response.data.message}`);
                 }
-            );
-
-            if (response.data.success) {
-                alert("Profile updated successfully!");
-                setClient(response.data.user);
-            } else {
-                triggerAlert("Failed to update profile.");
+            } catch (error) {
+                console.error(`Error updating ${field}:`, error);
+                triggerAlert(`Error updating ${field}`);
             }
-        } catch (error) {
-            console.error("Error updating profile:", error);
-            triggerAlert("An error occurred while updating the profile.");
         }
+
+        setIsEditing((prev) => ({ ...prev, [field]: !prev[field] }));
     };
+
 
     if (loading) return <div className="text-center"><Spinner animation="border" /></div>;
     if (error) return <p className="text-center text-danger">{error}</p>;
@@ -166,75 +167,95 @@ const ClientDashboard = () => {
             <div className="top-center-alert">
                 <CustomAlert message={alertMessage} onClose={() => setAlertMessage("")} />
             </div>
-            <div className="position-relative">
-                <h2 className="text-center mb-4">Client Dashboard</h2>
+            <h2 className="text-center mb-4">Client Dashboard</h2>
 
-                <Card className="p-4 mx-auto" style={{ width: "400px", borderRadius: "15px", background: "linear-gradient(135deg, #333, #d2cfca)", color: "white" }}>
-                    <div className="text-center position-relative">
-                        {/* Profile Picture */}
-                        <img
-                            src={
-                                formData.profilePicture instanceof File
-                                    ? URL.createObjectURL(formData.profilePicture)
-                                    : client?.profilePicture || "https://dummyimage.com/150"
+            <Card className="p-4 mx-auto" style={{ width: "700px", borderRadius: "15px", background: "linear-gradient(135deg, #333, #d2cfca)", color: "white" }}>
+                <div className="text-center">
+                    <img
+                        src={
+                            formData.profilePicture instanceof File
+                                ? URL.createObjectURL(formData.profilePicture)
+                                : formData.profilePicture || "https://dummyimage.com/150"
+                        }
+                        alt="Profile"
+                        className="rounded-circle"
+                        style={{ width: "120px", height: "120px", objectFit: "cover" }}
+                        onLoad={(e) => {
+                            if (formData.profilePicture instanceof File) {
+                                URL.revokeObjectURL(e.target.src);
                             }
-                            alt="Profile"
-                            className="rounded-circle"
-                            style={{ width: "120px", height: "120px", objectFit: "cover" }}
-                            onLoad={(e) => {
-                                if (formData.profilePicture instanceof File) {
-                                    URL.revokeObjectURL(e.target.src); // Prevent memory leaks
-                                }
-                            }}
-                            onError={(e) => {
-                                e.target.src = "https://dummyimage.com/150"; // Fallback if the image fails to load
-                            }}
-                        />
+                        }}
+                        onError={(e) => {
+                            e.target.src = "https://dummyimage.com/150";
+                        }}
+                    />
 
-                        {/* Edit Button - Positioned Below the Image */}
-                        <Button
-                            variant="light"
-                            size="sm"
-                            className="mt-2 d-block mx-auto" // Centered below the image
-                            onClick={() => toggleEdit("profilePicture")}
-                        >
-                            ✎
-                        </Button>
+                    <Button
+                        variant="light"
+                        size="sm"
+                        className="mt-2 d-block mx-auto"
+                        onClick={() => setShowFileInput(!showFileInput)}
+                    >
+                        ✎
+                    </Button>
 
-                        {/* File Input and Upload Button (Visible When Editing) */}
-                        {isEditing.profilePicture && (
-                            <div className="mt-2">
-                                <Form.Control type="file" accept="image/*" onChange={handleFileChange} />
-                                <Button variant="dark" size="sm" className="mt-2" onClick={handleProfileUpload}>
-                                    Upload Profile Picture
-                                </Button>
-                            </div>
-                        )}
-                    </div>
+                    {showFileInput && (
+                        <div className="mt-2">
+                            <Form.Control type="file" accept="image/*" onChange={handleFileChange} />
+                            <Button variant="dark" size="sm" className="mt-2" onClick={handleProfileUpload}>
+                                Upload Profile Picture
+                            </Button>
+                        </div>
+                    )}
+                </div>
 
-                    <Form onSubmit={handleSubmit} className="mt-3">
-                        <Row>
-                            {["clientname", "mobile", "email", "state", "district", "username", "password", "advocateEmail"].map((field) => (
+                <Form className="mt-3">
+                    <Row>
+                        {Object.keys(formData).map((field) => (
+                            ["clientname", "mobile", "state", "district", "username", "advocateEmail"].includes(field) && (
                                 <Col md={12} key={field} className="mb-2">
                                     <Form.Group className="d-flex align-items-center">
-                                        <Form.Label className="me-2" style={{ width: "40%", fontWeight: "bold" }}>{field.charAt(0).toUpperCase() + field.slice(1)}</Form.Label>
+                                        <Form.Label className="me-2" style={{ width: "40%", fontWeight: "bold" }}>
+                                            {field.charAt(0).toUpperCase() + field.slice(1)}
+                                        </Form.Label>
                                         <Form.Control
-                                            type={field === "password" || field === "confirmPassword" ? "password" : "text"}
+                                            type="text"
                                             name={field}
-                                            value={formData[field]}
+                                            value={formData[field] || ""}
                                             onChange={handleChange}
                                             disabled={!isEditing[field]}
                                             style={{ flex: 1, fontSize: "14px", padding: "5px" }}
                                         />
-                                        <Button variant="outline-light" size="sm" className="ms-2" onClick={() => toggleEdit(field)}>✎</Button>
+                                        <Button
+                                            variant="outline-light"
+                                            size="sm"
+                                            className="ms-2"
+                                            onClick={() => handleToggleEdit(field)}
+                                        >
+                                            {isEditing[field] ? "💾" : "✎"}
+                                        </Button>
                                     </Form.Group>
                                 </Col>
-                            ))}
-                        </Row>
-                        <Button variant="dark" type="submit" className="w-100 mt-3">Save Changes</Button>
-                    </Form>
-                </Card>
-            </div>
+                            )
+                        ))}
+
+                        <Col md={12} className="mb-2">
+                            <Form.Group className="d-flex align-items-center">
+                                <Form.Label className="me-2" style={{ width: "40%", fontWeight: "bold" }}>
+                                    Email
+                                </Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="email"
+                                    value={formData.email || ""}
+                                    disabled
+                                    style={{ flex: 1, fontSize: "14px", padding: "5px" }}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                </Form>
+            </Card>
         </div>
     );
 };

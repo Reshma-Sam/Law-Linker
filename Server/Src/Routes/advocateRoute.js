@@ -51,9 +51,17 @@ router.get("/appointments", authenticateToken, advocateControllers.getAppointmen
 //PATCH : Updating Appointment Status
 //------------------------------------
 router.patch("/appointment-status/:id", authenticateToken, advocateControllers.updateAppointmentStatus);
-//Listing Approved Appointments (future)
+//GET :Listing Approved Appointments (future)
 //--------------------------------------
 router.get('/approved-appointments', authenticateToken,advocateControllers.approvalList)
+// GET : Fetch junior advocates under a specific advocate
+//-------------------------------------------------------
+router.get('/junior-advocates',authenticateToken,advocateControllers.getJuniorAdvocatesByAdvocateEmail)
+// POST : Create a task for a specific Jr. Advocate under the logged-in advocate
+//-------------------------------------------------------------------------------
+router.post('/allocate-task',authenticateToken, advocateControllers.allocateTask)
+// GET : Fetch tasks assigned by the logged-in advocate
+router.get('/tasks', authenticateToken, advocateControllers.getTasksByAdvocate);
 
 module.exports = router
 

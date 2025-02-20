@@ -82,12 +82,13 @@ const NavigationBar = ({ isAuth, handleShowLogin, handleLogout }) => {
                 <Nav.Link as={Link} to="/create-case" className={location.pathname === "/create-case" ? "active-link" : ""}>Create Case</Nav.Link>
                 <Nav.Link as={Link} to="/case-list" className={location.pathname === "/case-list" ? "active-link" : ""}>Case List</Nav.Link>
                 <Nav.Link as={Link} to="/client-list" className={location.pathname === "/client-list" ? "active-link" : ""}>Client List</Nav.Link>
+                <Nav.Link as={Link} to="/advocate-jr.advocate" className={location.pathname === "/advocate-jr.advocate" ? "active-link" : ""}>Jr.Advocates</Nav.Link>
                 <Nav.Link as={Link} to="/tracking" className={location.pathname === "/tracking" ? "active-link" : ""}>Track Payment</Nav.Link>
                 <Nav.Link as={Link} to="/advocate-messages" className={location.pathname === "/advocate-messages" ? "active-link" : ""}>Messages</Nav.Link>
                 <Nav.Link as={Link} to="/advocate-appointments" className={location.pathname === "/advocate-appointments" ? "active-link" : ""}>Appointments</Nav.Link>
               </>
             )}
-            { authenticated &&  userType === "jr.advocate" && (
+            {authenticated && userType === "jr.advocate" && (
               <>
                 <Nav.Link as={Link} to="/jr.advocate-dashboard" className={location.pathname === "/jr.advocate-dashboard" ? "active-link" : ""}>Dashboard</Nav.Link>
                 <Nav.Link as={Link} to="/create-case" className={location.pathname === "/create-case" ? "active-link" : ""}>Create Case</Nav.Link>

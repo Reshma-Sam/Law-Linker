@@ -135,6 +135,73 @@ exports.getOtherUserProfile = async (req, res) => {
     }
 }
 
+// Update User Profile
+//----------------------
+
+exports.updateUserProfile = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const usertype = req.user?.usertype;
+        const updateData = req.body;
+
+        // Prevent email from being updated
+        if (updateData.email) {
+            return res.status(400).json({ success: false, message: "Email cannot be updated" });
+        }
+
+        let userModel;
+        switch (usertype) {
+            case 'admin':
+                userModel = Admin;
+                break;
+            case 'advocate':
+                userModel = Advocate;
+                break;
+            case 'jr.advocate':
+                userModel = JrAdvocate;
+                break;
+            case 'client':
+                userModel = Client;
+                break;
+            default:
+                return res.status(400).json({ success: false, message: "Invalid user type" });
+        }
+
+        // Find the user by ID
+        const user = await userModel.findById(id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: `${usertype} not found` });
+        }
+
+        // Update password if provided, without hashing
+        if (updateData.password) {
+            user.password = updateData.password;
+            user.confirmPassword = updateData.password;
+        }
+
+        // Update other fields except email and password
+        Object.keys(updateData).forEach((key) => {
+            if (key !== "email" && key !== "password" && key !== "confirmPassword") {
+                user[key] = updateData[key];
+            }
+        });
+
+        // Save updated profile
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: `${usertype} profile updated successfully`,
+            user
+        });
+
+    } catch (error) {
+        console.error("Error updating user profile:", error);
+        res.status(500).json({ success: false, message: "Server error", error });
+    }
+};
+
+
 
 
 

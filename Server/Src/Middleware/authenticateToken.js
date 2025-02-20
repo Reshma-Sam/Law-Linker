@@ -7,11 +7,11 @@ const authenticateToken = (req, res, next) => {
     if (!token) {
         return res.status(401).json({ message: 'No token provided' })
     }
-    console.log("JWT Secret:", process.env.JWT_SECRET_KEY);
+    // console.log("JWT Secret:", process.env.JWT_SECRET_KEY);
 
 
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
-        console.log("Using Secret Key:", process.env.JWT_SECRET_KEY); // Log the secret
+        // console.log("Using Secret Key:", process.env.JWT_SECRET_KEY); // Log the secret
         if (err) {
             return res.status(403).json({ message: 'Invalid or expired token' });
         }

@@ -51,6 +51,8 @@ import PaymentSuccess from './Pages/PaymentSuccess'
 import PaymentFailed from './Pages/PaymentFailed'
 import PaymentForm from './Components/PaymentForm'
 import JrAdvocateDashboard from './Pages/JrAdvocateDashboard'
+import AdvocateJradvocate from './Pages/AdvocateDashboard/AdvocateJradvocate'
+import TaskAllocation from './Pages/AdvocateDashboard/TaskAllocation'
 
 function App() {
   const [isAuth, setAuth] = useState(false)
@@ -246,7 +248,8 @@ function App() {
               <Route path="/tracking" element={<TrackPayment advocateEmail={loggedInUserEmail} />} />
               <Route path="/advocate-messages" element={<AdvocateMessages advocateEmail={loggedInUserEmail} />} />
               <Route path="/advocate-appointments" element={<AdvocateAppointments />} />
-
+              <Route path="/advocate-jr.advocate" element={<AdvocateJradvocate advocateEmail={loggedInUserEmail}/>} />
+              <Route path="/advocate-task-allocation" element={<TaskAllocation advocateEmail={loggedInUserEmail}/>} />
 
               {/* Client Specific Routes */}
               <Route path="/client-cases" element={<ClientCases />} />

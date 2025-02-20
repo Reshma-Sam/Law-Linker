@@ -178,9 +178,9 @@ function SignupClient({ show, usertype, setUsertype, handleClose, setModalType, 
                     required
                   >
                     <option value="">Select State</option>
-                    <option value="admin">Kerala</option>
-                    <option value="advocate">Tamil Nadu</option>
-                    <option value="client">Bangalore</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Tamil nadu">Tamil Nadu</option>
+                    <option value="Bangalore">Bangalore</option>
                   </Form.Select>
                 </div>
               </Form.Group>

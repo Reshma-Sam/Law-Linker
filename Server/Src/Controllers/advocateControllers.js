@@ -6,6 +6,7 @@ const Client = require('../Model/clientModel')
 const Case = require('../Model/caseModel')
 const Message = require('../Model/messageModel')
 const Appointment = require('../Model/appoinmentModel')
+const Task = require('../Model/taskModel')
 const bcrypt = require('bcryptjs')
 
 // Sign up for Advocate
@@ -494,6 +495,90 @@ exports.approvalList = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 }
+
+// Fetch junior advocates under a specific advocate
+//-------------------------------------------------
+
+exports.getJuniorAdvocatesByAdvocateEmail = async (req, res) => {
+        try {
+            const advocateEmail = req.user?.email;  // Ensure email is extracted from the token
+            if (!advocateEmail) {
+                return res.status(400).json({ message: "Logged-in user email not found." });
+            }
+    
+            console.log("Advocate Email:", advocateEmail);  // Debugging line
+    
+            const jrAdvocates = await JrAdvocate.find({ advocateemail: advocateEmail });
+    
+            console.log("Fetched Junior Advocates:", jrAdvocates);  // Debugging line
+    
+            res.status(200).json({ success: true, jrAdvocates });
+        } catch (error) {
+            console.error("Error fetching junior advocates:", error);
+            res.status(500).json({ message: "Server error" });
+        }
+    };
+    
+// Create a task for a specific Jr. Advocate under the logged-in advocate
+//------------------------------------------------------------------------
+
+exports.allocateTask = async (req, res) => {
+    const { title, description, jrAdvocateId, dueDate } = req.body;
+    const advocateEmail = req.user.email;
+
+    try {
+        // Check if the Jr. Advocate belongs to the logged-in advocate
+        const jrAdvocate = await JrAdvocate.findOne({ _id: jrAdvocateId, advocateemail: advocateEmail });
+
+        if (!jrAdvocate) {
+            return res.status(403).json({ message: 'You can only assign tasks to your own Jr. Advocates.' });
+        }
+
+        // Create the task
+        const task = new Task({
+            title,
+            description,
+            assignedTo: jrAdvocateId,
+            assignedBy: req.user.id,
+            dueDate,
+        });
+
+        await task.save();
+        res.status(201).json({ message: 'Task allocated successfully!', task });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Failed to allocate task.' });
+    }
+}
+
+// Fetch tasks assigned by the logged-in advocate
+//------------------------------------------------
+
+exports.getTasksByAdvocate = async (req, res) => {
+    const advocateEmail = req.user.email;
+
+    try {
+        // Find all Jr. Advocates under the logged-in advocate
+        const jrAdvocates = await JrAdvocate.find({ advocateemail: advocateEmail }).select('_id');
+
+        if (!jrAdvocates.length) {
+            return res.status(404).json({ message: 'No Junior Advocates found under this advocate.' });
+        }
+
+        // Extract Jr. Advocate IDs
+        const jrAdvocateIds = jrAdvocates.map(jr => jr._id);
+
+        // Find tasks assigned by the logged-in advocate
+        const tasks = await Task.find({ assignedTo: { $in: jrAdvocateIds } })
+            .populate('assignedTo', 'firstname lastname email')
+            .populate('assignedBy', 'email');
+
+        res.status(200).json({ tasks });
+    } catch (error) {
+        console.error('Failed to fetch tasks:', error);
+        res.status(500).json({ message: 'Failed to fetch tasks.' });
+    }
+};
 
 
 
