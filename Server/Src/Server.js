@@ -35,7 +35,8 @@ app.use("/invoices", express.static("invoices"));
 
 const allowedOrigins = [
   'http://localhost:5173', // Local dev
-  process.env.FRONTEND_URL || 'https://law-linker-client.vercel.app' // Vercel or production URL
+  'https://law-linker-client.vercel.app', // Original Vercel domain
+  'https://law-linker-client-p0pam9m07-reshma-sams-projects.vercel.app' // Current live frontend
 ];
 
 // CORS configuration
