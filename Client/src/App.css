@@ -164,7 +164,7 @@ body {
 body {
     margin-top: 70px;
     /* To avoid overlap with fixed navbar */
-    background-image: url('C:/Enrti React/Advocate Automated/Client/src/Assets/image.jpg');
+    background-image: url('./Assets/image.jpg');
     background-size: cover !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
