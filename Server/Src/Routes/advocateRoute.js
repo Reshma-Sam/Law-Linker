@@ -61,7 +61,19 @@ router.get('/junior-advocates',authenticateToken,advocateControllers.getJuniorAd
 //-------------------------------------------------------------------------------
 router.post('/allocate-task',authenticateToken, advocateControllers.allocateTask)
 // GET : Fetch tasks assigned by the logged-in advocate
-router.get('/tasks', authenticateToken, advocateControllers.getTasksByAdvocate);
-
+//------------------------------------------------------
+router.get('/advocate-tasks', authenticateToken, advocateControllers.getTasksByAdvocate);
+//DELETE : Deleteing the task
+//----------------------------
+router.delete('/delete-task/:id',authenticateToken,advocateControllers.deleteTask)
+//PUT : Updating the task
+//------------------------
+router.put('/update-task/:id',authenticateToken,advocateControllers.editTask)
+//Fetching allocated task list of an Jr. advocate by senior advocate
+//------------------------------------------------------------------
+router.get('/jradvocate-allocatedtasks',authenticateToken,advocateControllers.getAllAllowcatedTasks)
+//Update allocated task status by jradvocate
+//------------------------------------------
+router.put('/update-allocated-task/:taskId',authenticateToken,advocateControllers.updateTaskStatus)
 module.exports = router
 

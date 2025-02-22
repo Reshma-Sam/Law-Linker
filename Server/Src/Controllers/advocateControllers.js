@@ -580,6 +580,81 @@ exports.getTasksByAdvocate = async (req, res) => {
     }
 };
 
+//Deleting the task
+//-----------------
+
+exports.deleteTask = async (req ,res) => {
+    try {
+        const { id } = req.params;
+        await Task.findByIdAndDelete(id);
+        res.json({ message: 'Task deleted successfully.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to delete task.' });
+    }
+}
+
+//Updating the task
+//-----------------
+
+exports.editTask = async (req ,res) => {
+    try {
+        const { id } = req.params;
+        const { title, description, dueDate } = req.body;
+        const updatedTask = await Task.findByIdAndUpdate(id, { title, description, dueDate }, { new: true });
+        res.json({ message: 'Task updated successfully.', task: updatedTask });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update task.' });
+    }
+}
+
+//Fetching allocated task list of an Jr. advocate by senior advocate
+//------------------------------------------------------------------
+
+exports.getAllAllowcatedTasks = async (req ,res) => {
+
+    try {
+        const jrAdvocateId = req.user.id;  // Extract Jr. Advocate ID from token
+        // console.log("Fetching tasks for Jr. Advocate ID:", jrAdvocateId);
+
+        const tasks = await Task.find({ assignedTo: jrAdvocateId })
+            .populate('assignedBy', 'firstname lastname')  // Shows who assigned the task
+            .sort({ createdAt: -1 });  // Sort by newest first
+
+        res.status(200).json({
+            success: true,
+            message: 'Tasks fetched successfully.',
+            tasks
+        });
+    } catch (error) {
+        console.error('Error fetching Jr. Advocate tasks:', error);
+        res.status(500).json({ message: 'Failed to fetch tasks for Jr. Advocate.' });
+    }
+}
+
+//Update allocated task status by jradvocate
+//------------------------------------------
+
+exports.updateTaskStatus = async (req, res) => {
+const { taskId } = req.params;
+    const { status } = req.body;
+
+    try {
+        const updatedTask = await Task.findByIdAndUpdate(
+            taskId,
+            { status },
+            { new: true }  // Ensure the updated task is returned
+        );
+
+        if (!updatedTask) {
+            return res.status(404).json({ success: false, message: 'Task not found.' });
+        }
+
+        res.status(200).json({ success: true, message: 'Task status updated successfully.', task: updatedTask });
+    } catch (error) {
+        console.error('Error updating task status:', error);
+        res.status(500).json({ success: false, message: 'Failed to update task status.' });
+    }
+}
 
 
 

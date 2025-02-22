@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Modal, Form, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const AdvocateJradvocate = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -10,21 +12,12 @@ const AdvocateJradvocate = () => {
     const [selectedAdvocate, setSelectedAdvocate] = useState(null);
     const [tasks, setTasks] = useState([]);
     const [task, setTask] = useState({ title: '', description: '', dueDate: '' });
+    const navigate = useNavigate();
 
-    // Fetch Task List
-    const fetchTaskList = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const res = await axios.get(`${apiUrl}/advocate/tasks`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setTasks(res.data.tasks);
-            setShowModal(true);
-        } catch (error) {
-            console.error('Failed to fetch task list:', error);
-        }
+    const handleShowTaskList = async () => {
+        navigate('/advocate-allocated-tasklist');  // Navigate to the desired route
     };
-    
+
     // Fetch Junior Advocates
     useEffect(() => {
         const fetchJrAdvocates = async () => {
@@ -39,6 +32,11 @@ const AdvocateJradvocate = () => {
             }
         };
         fetchJrAdvocates();
+    }, []);
+     
+    // Cleanup effect to close modal on unmount
+    useEffect(() => {
+        return () => setShowModal(false);  // Ensure modal is closed when component unmounts
     }, []);
 
     // Filtered Advocates based on Search (multi-field search)
@@ -90,13 +88,20 @@ const AdvocateJradvocate = () => {
         }
     };
 
+    // Date Validation
+    const isValidDueDate = (date) => {
+        const today = new Date().toISOString().split('T')[0];
+        return date >= today;
+    };
+
     return (
         <div className="container mt-4">
             <h2 className='text-center'>Junior Advocates</h2>
             <div className='text-center pb-5'>
-            <Button variant="secondary" onClick={fetchTaskList}>
-                Show Task List
-            </Button>
+                <Button variant="secondary" onClick={handleShowTaskList}>
+                    Show Task List
+                </Button>
+
             </div>
             {/* Search Bar (multi-field search) */}
             <Form.Control
@@ -172,6 +177,7 @@ const AdvocateJradvocate = () => {
                                 value={task.dueDate}
                                 onChange={(e) => setTask({ ...task, dueDate: e.target.value })}
                                 required
+                                min={new Date().toISOString().split('T')[0]} 
                             />
                         </Form.Group>
                         <Button variant="dark" type="submit">

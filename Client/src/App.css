@@ -1068,3 +1068,20 @@ body {
     color: red !important;
     transform: scale(1.1);
 }
+
+/* Edit Task Modal */
+/* ----------------*/
+
+/* Custom Modal Width */
+.custom-modal-width .modal-dialog {
+    max-width: 900px !important; /* Wider modal */
+    width: 95% !important;      /* Ensure responsiveness */
+    margin: 0 auto;             /* Center the modal */
+}
+
+/* Ensure Modal Body Uses Full Width */
+.custom-modal-width .modal-content {
+    padding: 20px;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
