@@ -1,28 +1,56 @@
 import React, { useState } from "react";
 import Footer from "../Components/Footer";
+import axios from "axios";
 
 function LandingPage() {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     advocateEmail: "",
-    firstname: "",
-    lastname: "",
+    clientName: "",
+    date: "",
+    time: "",
     subject: "",
-    message: "",
+    message: ""
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Contact Form Submitted:", formData);
-    // Add API request logic here
+    setLoading(true);  // Start loading
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(`${apiUrl}/client/book-appointment`,
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.status === 200) {
+        alert("Appointment booked successfully!");
+        setFormData({
+          advocateEmail: "",
+          clientName: "",
+          date: "",
+          time: "",
+          subject: "",
+          message: ""
+        });
+      } else {
+        alert(response.data?.message || "Failed to book appointment.");
+      }
+    } catch (error) {
+      console.error("Error during submission:", error);
+      alert(error.response?.data?.message || "Server error. Please try again.");
+    } finally {
+      setLoading(false);  // Stop loading
+    }
   };
+
 
   return (
     <>
@@ -40,7 +68,7 @@ function LandingPage() {
         <section className="aboutContact">
           {/* About Section */}
           {/* -------------- */}
-          <section  id="about-section" className="aboutSection">
+          <section id="about-section" className="aboutSection">
             <h1>About Us</h1>
             <p>
               At <strong>Law Linker</strong>, we provide expert legal guidance tailored to your needs. Our experienced
@@ -93,6 +121,7 @@ function LandingPage() {
 
           {/* Contact Form */}
           {/* ------------- */}
+          {/* Contact Form */}
           <section>
             <div className="contactForm">
               <form onSubmit={handleSubmit}>
@@ -108,23 +137,35 @@ function LandingPage() {
                   />
                 </div>
 
+                <div className="form-group">
+                  <label>Client Name <span className="text-danger">*</span></label>
+                  <input
+                    type="text"
+                    name="clientName"
+                    value={formData.clientName}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
                 <div className="nameFields">
                   <div className="form-group">
-                    <label>First Name <span className="text-danger">*</span></label>
+                    <label>Date <span className="text-danger">*</span></label>
                     <input
-                      type="text"
-                      name="firstname"
-                      value={formData.firstname}
+                      type="date"
+                      name="date"
+                      value={formData.date}
+                      min={new Date().toISOString().split("T")[0]}  // Prevent past dates
                       onChange={handleChange}
                       required
                     />
                   </div>
                   <div className="form-group">
-                    <label>Last Name <span className="text-danger">*</span></label>
+                    <label>Time <span className="text-danger">*</span></label>
                     <input
-                      type="text"
-                      name="lastname"
-                      value={formData.lastname}
+                      type="time"
+                      name="time"
+                      value={formData.time}
                       onChange={handleChange}
                       required
                     />
@@ -152,16 +193,21 @@ function LandingPage() {
                     required
                   />
                 </div>
+
                 <center>
-                  <button className="loginButton" type="submit"> Send</button>
+                  <button className="loginButton" type="submit" disabled={loading}>
+                    {loading ? "Booking..." : "Send"}
+                  </button>
                 </center>
+
               </form>
             </div>
           </section>
+
         </section>
 
-        <Footer/>
-        
+        <Footer />
+
       </div >
     </>
   );

@@ -10,6 +10,15 @@ router.post('/signupClient',clientController.signUpClient)
 //POST : Booking Appoinment advocate
 //--------------------------
 router.post('/book-appointment',authenticateClient,authenticateToken,clientController.bookAppointment)
+//GET : Retrieving own appointment requests
+//-----------------------------------------
+router.get('/appointment-list',authenticateToken,clientController.getClientAppointments)
+//PUT : Update Appointment
+//-------------------------
+router.put('/appointment/:id',authenticateToken,clientController.updateAppointmentByClient)
+//DELETE : Delete Appointment
+//----------------------------
+router.delete('/appointment/:id',authenticateToken,clientController.deleteAppointmentByClient)
 //GET : Retrieving own cases
 //--------------------------
 router.get('/cases', authenticateClient,authenticateToken,clientController.getClientCases)

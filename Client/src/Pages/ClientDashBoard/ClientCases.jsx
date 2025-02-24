@@ -75,7 +75,7 @@ const ClientCases = () => {
     return (
 
     <div className="container mt-4">
-        <h2 className="text-center">Client Cases</h2>
+        <h2 className="text-center">My Cases</h2>
         {cases.length === 0 ? (
             <p>No cases found.</p>
         ) : (

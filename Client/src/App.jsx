@@ -55,6 +55,7 @@ import AdvocateJradvocate from './Pages/AdvocateDashboard/AdvocateJradvocate'
 import TaskAllocation from './Pages/AdvocateDashboard/TaskAllocation'
 import AdvocateTaskList from './Pages/AdvocateDashboard/AdvocateTaskList'
 import JrAdvocateTasklist from './Pages/AdvocateDashboard/JrAdvocateTasklist'
+import ClientAppointmentList from './Pages/ClientDashBoard/ClientAppointmentList'
 
 function App() {
   const [isAuth, setAuth] = useState(false)
@@ -259,12 +260,12 @@ function App() {
               <Route path="/client-cases" element={<ClientCases />} />
               <Route path="/client-payments" element={<Elements stripe={stripePromise}> <ClientPayments /></Elements>} />
               <Route path="/client-booking" element={<BookAppoinment />} />
+              <Route path='/appointment-list' element={<ClientAppointmentList />} />
 
               {/* Payment Specific Routes */}
               <Route path="/payment-success" element={<PaymentSuccess />} />
               <Route path="/payment-failed" element={<PaymentFailed />} />
               <Route path="/payment-history" element={<PaymentForm />} />
-
 
             </Route>
           </Routes>

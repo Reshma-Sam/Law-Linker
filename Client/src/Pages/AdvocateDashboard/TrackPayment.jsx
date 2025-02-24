@@ -6,7 +6,6 @@ import {jwtDecode} from "jwt-decode";
 
 // Function to get the logged-in advocate's email from the JWT token
 const getLoggedInAdvocateEmail = () => {
-    const apiUrl = import.meta.env.VITE_API_URL
     const token = localStorage.getItem("token");
     if (!token) {
         console.warn("No token found in localStorage.");
@@ -32,6 +31,7 @@ const getLoggedInAdvocateEmail = () => {
 };
 
 const TrackPayment = () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -80,27 +80,27 @@ const TrackPayment = () => {
                 <p className="text-center">No payment history found.</p>
             ) : (
                 <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>Payment ID</th>
-                            <th>Recipient Email</th>
-                            <th>Amount (₹)</th>
-                            <th>Status</th>
-                            <th>Date</th>
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Recipient Email</th>
+                        <th>Amount (₹)</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {payments.map((payment) => (
+                        <tr key={payment.paymentId || payment.id}>
+                            <td>{payment.paymentId || payment.id}</td>
+                            <td>{payment.receiptEmail}</td>
+                            <td>{payment.amount / 100} {payment.currency?.toUpperCase() || "INR"}</td>
+                            <td>{payment.paymentStatus}</td>
+                            <td>{new Date(payment.date).toLocaleString()}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {payments.map((payment) => (
-                            <tr key={payment.paymentId || payment.id}> {/* Ensure a unique key */}
-                                <td>{payment.paymentId || payment.id}</td>
-                                <td>{payment.receiptEmail}</td>
-                                <td>{payment.amount / 100} {payment.currency?.toUpperCase() || "INR"}</td>
-                                <td>{payment.paymentStatus}</td>
-                                <td>{new Date(payment.date).toLocaleString()}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                    ))}
+                </tbody>
+            </Table>            
             )}
         </Container>
     );

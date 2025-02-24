@@ -37,7 +37,7 @@ const PaymentSuccess = () => {
         setLoading(true);
         try {
             const response = await axios.post(
-                "${apiUrl}/invoice/generate-invoice",
+                `${apiUrl}/invoice/generate-invoice`,
                 { clientName, clientEmail, amount, paymentId },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

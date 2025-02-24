@@ -56,8 +56,8 @@ exports.signUpClient = async (req, res) => {
 
 exports.bookAppointment = async (req, res) => {
     const { advocateEmail, date, time, subject, message } = req.body;
-    const clientEmail = req.user.email; 
-    const clientName = req.user.name;  // Ensure name is extracted from JWT
+    const clientEmail = req.user.email;
+    const clientName = req.user.name; // Ensure name is extracted from JWT
 
     console.log("Advocate Email from Request:", advocateEmail); // Debugging
 
@@ -67,15 +67,15 @@ exports.bookAppointment = async (req, res) => {
     }
 
     try {
-        // Ensure advocate email is provided
-        if (!advocateEmail) {
-            return res.status(400).json({ message: "Advocate email is required" });
+        // Check advocate or jr. advocate by email
+        let advocate = await Advocate.findOne({ email: advocateEmail });
+
+        if (!advocate) {
+            advocate = await JrAdvocate.findOne({ email: advocateEmail });
         }
 
-        // Fetch advocate details
-        const advocate = await Advocate.findOne({ email: advocateEmail });
         if (!advocate) {
-            return res.status(404).json({ message: "Advocate not found" });
+            return res.status(404).json({ message: "Advocate or Jr. Advocate not found" });
         }
 
         // Check if appointment slot is already booked
@@ -103,7 +103,67 @@ exports.bookAppointment = async (req, res) => {
         console.error("Error booking appointment:", error);
         res.status(500).json({ message: "Server error" });
     }
+}
+
+//Getting own appointment requests
+//--------------------------------
+
+exports.getClientAppointments = async (req, res) => {
+    const clientEmail = req.user.email;  // Assuming the email is extracted from the token
+
+    try {
+        const appointments = await Appointment.find({ clientEmail });
+        res.status(200).json(appointments);
+    } catch (error) {
+        console.error("Error fetching appointments:", error);
+        res.status(500).json({ message: "Failed to fetch appointments" });
+    }
+}
+
+// Update Appointment
+//-------------------
+
+exports.updateAppointmentByClient = async (req, res) => {
+    const { id } = req.params;
+    const { subject, date, time, message } = req.body;
+
+    try {
+        const updatedAppointment = await Appointment.findByIdAndUpdate(
+            id,
+            { subject, date, time, message },
+            { new: true }
+        );
+
+        if (!updatedAppointment) {
+            return res.status(404).json({ message: "Appointment not found" });
+        }
+
+        res.status(200).json({ message: "Appointment updated successfully", updatedAppointment });
+    } catch (error) {
+        console.error("Error updating appointment:", error);
+        res.status(500).json({ message: "Failed to update appointment" });
+    }
 };
+
+// Delete Appointment
+//--------------------
+
+exports.deleteAppointmentByClient = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedAppointment = await Appointment.findByIdAndDelete(id);
+
+        if (!deletedAppointment) {
+            return res.status(404).json({ message: "Appointment not found" });
+        }
+
+        res.status(200).json({ message: "Appointment deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting appointment:", error);
+        res.status(500).json({ message: "Failed to delete appointment" });
+    }
+}
 
 // Getting own cases
 // -----------------

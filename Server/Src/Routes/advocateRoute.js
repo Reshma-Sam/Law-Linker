@@ -75,5 +75,7 @@ router.get('/jradvocate-allocatedtasks',authenticateToken,advocateControllers.ge
 //Update allocated task status by jradvocate
 //------------------------------------------
 router.put('/update-allocated-task/:taskId',authenticateToken,advocateControllers.updateTaskStatus)
+
+
 module.exports = router
 
