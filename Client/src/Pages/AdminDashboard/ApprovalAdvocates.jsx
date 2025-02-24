@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Button, Container, Row, Col, Alert } from "react-bootstrap";
+import { Card, Button, Container, Row, Col, Alert, Image } from "react-bootstrap";
 import CustomAlert from "../../Components/CustomAlert";
 
 const ApprovalAdvocates = () => {
@@ -78,6 +78,14 @@ const ApprovalAdvocates = () => {
                             <Col key={advocate._id} md={4} className="mb-4">
                                 <Card>
                                     <Card.Body>
+                                        <div className="mb-3 text-center">
+                                            <Image
+                                                src={advocate.profilePicture || "https://dummyimage.com/200"}
+                                                alt={`${advocate.firstname} ${advocate.lastname}`}
+                                                roundedCircle
+                                                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                                            />
+                                        </div>
                                         <Card.Title>{advocate.firstname} {advocate.lastname}</Card.Title>
                                         <Card.Subtitle className="mb-2 text-muted">{advocate.usertype}</Card.Subtitle>
                                         <Card.Subtitle className="mb-2 text-muted">{advocate.email}</Card.Subtitle>
@@ -103,7 +111,7 @@ const ApprovalAdvocates = () => {
                     </Row>
                 )
                 }
-                </div>
+            </div>
         </Container >
     );
 };

@@ -61,7 +61,7 @@ const JrAdvocateAproval = () => {
                             <Card.Body className="text-center">
                                 {/* Profile Picture at the Top */}
                                 <Image
-                                    src={advocate.profilePicture || "https://via.placeholder.com/150"}
+                                    src={advocate.profilePicture || "https://dummyimage.com/200"}
                                     alt={`${advocate.firstname} ${advocate.lastname}`}
                                     roundedCircle
                                     style={{
