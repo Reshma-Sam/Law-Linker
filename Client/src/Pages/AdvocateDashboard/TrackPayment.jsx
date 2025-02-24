@@ -39,27 +39,25 @@ const TrackPayment = () => {
     useEffect(() => {
         const fetchPayments = async () => {
             try {
-                const advocateEmail = getLoggedInAdvocateEmail(); // Get the advocate's email from the token
+                const advocateEmail = getLoggedInAdvocateEmail();
                 if (!advocateEmail) {
                     console.warn("No advocate email found.");
                     return;
                 }
-
-                // Make the GET request to fetch payments for the logged-in advocate
-                const response = await axios.get(`${apiUrl}/payment/history`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`, // Pass token in the request header
-                    },
-                    params: { recipientEmail: advocateEmail }, // Pass the advocate's email as a query parameter
+        
+                const response = await axios.get(`${apiUrl}/payment//advocate/history`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                    params: { recipientEmail: advocateEmail },
                 });
-
-                setPayments(response.data);
+        
+                console.log("API Response:", response.data); // Check this output
+                setPayments(response.data.payments || []); // Ensure it accesses the array properly
             } catch (error) {
                 console.error("Error fetching payment history:", error);
             } finally {
                 setLoading(false);
             }
-        };
+        };        
 
         fetchPayments();
     }, []);
@@ -94,7 +92,7 @@ const TrackPayment = () => {
                         <tr key={payment.paymentId || payment.id}>
                             <td>{payment.paymentId || payment.id}</td>
                             <td>{payment.receiptEmail}</td>
-                            <td>{payment.amount / 100} {payment.currency?.toUpperCase() || "INR"}</td>
+                            <td>{payment.amount} {payment.currency?.toUpperCase() || "INR"}</td>
                             <td>{payment.paymentStatus}</td>
                             <td>{new Date(payment.date).toLocaleString()}</td>
                         </tr>

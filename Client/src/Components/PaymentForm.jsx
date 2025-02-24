@@ -11,12 +11,21 @@ const PaymentForm = () => {
 
     useEffect(() => {
         const fetchPayments = async () => {
+            const token = localStorage.getItem('token');
+            console.log("Token in Local Storage:", token);
+
+            if (!token) {
+                console.error("No token found!");
+                return;
+            }
+
             try {
-                const token = localStorage.getItem("token");
-                const response = await axios.get(`${apiUrl}/payment/history`, {
-                    headers: { Authorization: `Bearer ${token}` },
+                const response = await axios.get('http://localhost:5500/api/payment/history', {
+                    headers: { Authorization: `Bearer ${token}` }
                 });
-                setPayments(response.data);
+
+                console.log("API Response:", response.data);  // Log the response
+                setPayments(response.data.payments || []);  // Ensure it's an array
             } catch (error) {
                 console.error("Error fetching payment history:", error);
             } finally {
@@ -26,6 +35,7 @@ const PaymentForm = () => {
 
         fetchPayments();
     }, []);
+
 
     return (
         <Container>
@@ -54,15 +64,16 @@ const PaymentForm = () => {
                     </thead>
                     <tbody>
                         {payments.map((payment) => (
-                            <tr key={payment.id}>
-                                <td>{payment.id}</td>
-                                <td>{payment.recipientEmail}</td>
-                                <td>{payment.amount / 100} {payment.currency.toUpperCase()}</td>
-                                <td>{payment.status}</td>
-                                <td>{new Date(payment.created * 1000).toLocaleString()}</td>
+                            <tr key={payment.id || Math.random()}>
+                                <td>{payment.id || 'N/A'}</td>
+                                <td>{payment.recipientEmail || 'N/A'}</td>
+                                <td>{payment.amount} {payment.currency?.toUpperCase() || 'INR'}</td>
+                                <td>{payment.status || 'N/A'}</td>
+                                <td>{payment.created ? new Date(payment.created).toLocaleString() : 'N/A'}</td>
                             </tr>
                         ))}
                     </tbody>
+
                 </Table>
             )}
         </Container>

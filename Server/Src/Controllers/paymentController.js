@@ -111,14 +111,28 @@ exports.savePaymentDetails = async (paymentIntent, clientId, clientEmail, recipi
 
 exports.getPaymentHistory = async (req, res) => {
     try {
-        const { customerId } = req.params;
-        const payments = await stripe.paymentIntents.list({
-            customer: customerId,
-            limit: 10, // Fetch last 10 payments for that user
-        });
-        res.json(payments.data);
+        const userId = req.user?.id;  // Corrected from req.user?.userid to req.user?.id
+        if (!userId) {
+            console.error("User ID not found in token.");
+            return res.status(401).json({ message: 'Unauthorized. User not identified.' });
+        }
+
+        console.log("Fetching payments for user ID:", userId);
+        const payments = await Payment.find({ userId }).sort({ date: -1 });
+
+        // Transform payment data
+        const formattedPayments = payments.map(payment => ({
+            id: payment.paymentId,               // Match frontend expectation
+            recipientEmail: payment.recipientEmail,
+            amount: payment.amount,
+            currency: "INR",                     // Since MongoDB doesn't store currency, add a default
+            status: payment.paymentStatus,
+            created: payment.date,               // MongoDB's 'date' field
+        }));
+
+        res.json({ success: true, message: "Successfully retrieved payment history", payments: formattedPayments });
     } catch (error) {
-        console.error("Error fetching user payment history:", error);
+        console.error("Error fetching user's payment history:", error);
         res.status(500).json({ error: error.message });
     }
 };
@@ -126,27 +140,27 @@ exports.getPaymentHistory = async (req, res) => {
 // Backend: Get payment history of a logged-in advocate
 //------------------------------------------------------
 
-exports.getPaymentReciepientHistory = async (req , res) => {
+exports.getPaymentReciepientHistory = async (req, res) => {
     try {
-        const { recipientEmail } = req.query; // Get the recipientEmail from query parameters
+        const loggedInAdvocateEmail = req.user.email; // From authMiddleware
 
-        if (!recipientEmail) {
-            return res.status(400).send('Recipient email is required');
+        if (!loggedInAdvocateEmail) {
+            return res.status(400).send("Logged-in advocate email not found.");
         }
 
-        // Fetch payments for the logged-in advocate where recipientEmail matches
-        const payments = await Payment.find({ recipientEmail });
+        // Fetch payments where recipientEmail matches the logged-in advocate's email
+        const payments = await Payment.find({ recipientEmail: loggedInAdvocateEmail });
 
         if (payments.length === 0) {
-            return res.status(404).send('No payments found for this advocate');
+            return res.status(404).send("No payments found for this advocate.");
         }
 
-        res.status(200).json(payments); // Return the payments
+        res.status(200).json({ success: true, payments });
     } catch (error) {
-        console.error('Error fetching payments:', error);
-        res.status(500).send('Server error');
+        console.error("Error fetching payments:", error);
+        res.status(500).send("Server error.");
     }
-}
+};
 
 
 //Webhook 

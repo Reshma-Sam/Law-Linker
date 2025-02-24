@@ -10,8 +10,8 @@ router.post('/pay',authenticateToken, paymentController.payment)
 //Webhook
 //--------
 router.post('/webhook',authenticateToken,paymentController.webhook)
-//GET : Getting Payment History
-//-----------------------------
+//GET : Getting Payment History of Client
+//---------------------------------------
 router.get('/history',authenticateToken,paymentController.getPaymentHistory)
 // GET : Getting payment history of a logged-in advocate
 //------------------------------------------------------
