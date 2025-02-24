@@ -500,25 +500,47 @@ exports.approvalList = async (req, res) => {
 //-------------------------------------------------
 
 exports.getJuniorAdvocatesByAdvocateEmail = async (req, res) => {
-        try {
-            const advocateEmail = req.user?.email;  // Ensure email is extracted from the token
-            if (!advocateEmail) {
-                return res.status(400).json({ message: "Logged-in user email not found." });
-            }
-    
-            console.log("Advocate Email:", advocateEmail);  // Debugging line
-    
-            const jrAdvocates = await JrAdvocate.find({ advocateemail: advocateEmail });
-    
-            console.log("Fetched Junior Advocates:", jrAdvocates);  // Debugging line
-    
-            res.status(200).json({ success: true, jrAdvocates });
-        } catch (error) {
-            console.error("Error fetching junior advocates:", error);
-            res.status(500).json({ message: "Server error" });
-        }
+    try {
+        const advocateEmail = req.user.email; // Get advocate email from middleware
+
+        // Fetch only pending requests for the logged-in advocate
+        const jrAdvocates = await JrAdvocate.find({
+            advocateemail: advocateEmail,
+            approvalStatus: 'pending'
+        });
+
+        res.json({ success: true, jrAdvocates });
+    } catch (error) {
+        console.error("Error fetching Jr. Advocate requests:", error);
+        res.status(500).json({ success: false, message: "Failed to fetch Jr. Advocate requests" });
+    }
     };
-    
+   
+// Update Jr. Advocate Verification Status (Accept/Reject)
+//--------------------------------------------------------
+
+exports.updateJrAdvocateStatus = async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body; // "accepted" or "rejected"
+
+    try {
+        const jrAdvocate = await JrAdvocate.findByIdAndUpdate(
+            id,
+            { approvalStatus: status },
+            { new: true }
+        );
+
+        if (!jrAdvocate) {
+            return res.status(404).json({ message: 'Jr. Advocate not found' });
+        }
+
+        res.status(200).json({ message: `Jr. Advocate ${status} successfully.`, jrAdvocate });
+    } catch (error) {
+        console.error('Error updating Jr. Advocate status:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 // Create a task for a specific Jr. Advocate under the logged-in advocate
 //------------------------------------------------------------------------
 

@@ -17,4 +17,4 @@ router.get('/history',authenticateToken,paymentController.getPaymentHistory)
 //------------------------------------------------------
 router.get('/advocate/history',authenticateToken,paymentController.getPaymentReciepientHistory)
 
-module.exports = router
+module.exports = router 

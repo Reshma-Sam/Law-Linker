@@ -56,6 +56,7 @@ import TaskAllocation from './Pages/AdvocateDashboard/TaskAllocation'
 import AdvocateTaskList from './Pages/AdvocateDashboard/AdvocateTaskList'
 import JrAdvocateTasklist from './Pages/AdvocateDashboard/JrAdvocateTasklist'
 import ClientAppointmentList from './Pages/ClientDashBoard/ClientAppointmentList'
+import JrAdvocateAproval from './Pages/AdvocateDashboard/JrAdvocateAproval'
 
 function App() {
   const [isAuth, setAuth] = useState(false)
@@ -255,6 +256,7 @@ function App() {
               <Route path="/advocate-task-allocation" element={<TaskAllocation advocateEmail={loggedInUserEmail}/>} />
               <Route path="/advocate-allocated-tasklist" element={<AdvocateTaskList /> } />
               <Route path='/jradvocate-allocated-tasks' element={<JrAdvocateTasklist />} />
+              <Route path='/jradvocate-aproval' element={<JrAdvocateAproval />} />
 
               {/* Client Specific Routes */}
               <Route path="/client-cases" element={<ClientCases />} />

@@ -57,6 +57,9 @@ router.get('/approved-appointments', authenticateToken,advocateControllers.appro
 // GET : Fetch junior advocates under a specific advocate
 //-------------------------------------------------------
 router.get('/junior-advocates',authenticateToken,advocateControllers.getJuniorAdvocatesByAdvocateEmail)
+// PUT : Update Jr. Advocate Verification Status (Accept/Reject)
+//-----------------------------------
+router.put('/requests/:id',authenticateToken,advocateControllers.updateJrAdvocateStatus)
 // POST : Create a task for a specific Jr. Advocate under the logged-in advocate
 //-------------------------------------------------------------------------------
 router.post('/allocate-task',authenticateToken, advocateControllers.allocateTask)

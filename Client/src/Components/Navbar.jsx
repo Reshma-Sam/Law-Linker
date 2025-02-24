@@ -86,6 +86,7 @@ const NavigationBar = ({ isAuth, handleShowLogin, handleLogout }) => {
                 <Nav.Link as={Link} to="/tracking" className={location.pathname === "/tracking" ? "active-link" : ""}>Track Payment</Nav.Link>
                 <Nav.Link as={Link} to="/advocate-messages" className={location.pathname === "/advocate-messages" ? "active-link" : ""}>Messages</Nav.Link>
                 <Nav.Link as={Link} to="/advocate-appointments" className={location.pathname === "/advocate-appointments" ? "active-link" : ""}>Appointments</Nav.Link>
+                <Nav.Link as={Link} to="/jradvocate-aproval" className={location.pathname === "/jradvocate-aproval" ? "active-link" : ""}>Aproval Juniors</Nav.Link>
               </>
             )}
             {authenticated && userType === "jr.advocate" && (
