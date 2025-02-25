@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Form, Button, Spinner, Alert, Container } from 'react-bootstrap'
+import { Form, Button, Spinner, Alert, Container } from 'react-bootstrap';
 import CustomAlert from '../../Components/CustomAlert';
 
 const UpdateCaseForm = () => {
-    const apiUrl = import.meta.env.VITE_API_URL
+    const apiUrl = import.meta.env.VITE_API_URL;
     const { caseId } = useParams();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -16,15 +16,12 @@ const UpdateCaseForm = () => {
         isActive: true
     });
     const [loading, setLoading] = useState(true);
-    const [alertMessage, setAlertMessage] = useState('')
+    const [alertMessage, setAlertMessage] = useState('');
 
-    // Function to show the custom alert
     const triggerAlert = (message) => {
         setAlertMessage(message);
         setTimeout(() => setAlertMessage(""), 3000);
     };
-
-
 
     useEffect(() => {
         const fetchCaseDetails = async () => {
@@ -52,8 +49,6 @@ const UpdateCaseForm = () => {
         fetchCaseDetails();
     }, [caseId]);
 
-
-
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         const newValue = type === 'checkbox' ? checked : value;
@@ -77,29 +72,22 @@ const UpdateCaseForm = () => {
     if (loading) return <Spinner animation="border" className="d-block mx-auto" />;
 
     const categories = [
-        "Civil / Debt Matters", "Cheque Bounce", "Civil Litigation", "Consumer Court",
-        "Documentation", "Recovery", "Corporate Law", "Arbitration", "Banking / Finance",
-        "Startup", "Tax", "Trademark & Copyright", "Criminal / Property",
-        "Criminal Litigation", "Cyber Crime", "Landlord / Tenant", "Property",
-        "Revenue", "Personal / Family", "Child Custody", "Divorce", "Family Dispute",
-        "Labour & Service", "Medical Negligence", "Motor Accident", "Muslim Law",
-        "Wills / Trusts", "Others", "Armed Forces Tribunal", "Immigration",
-        "Insurance", "International Law", "Notary", "Property Redevelopment", "Supreme Court"
+        "Civil / Debt Matters", "Corporate & Business", "Criminal / Property", "Personal & Family", "Labour & Service", "Intellectual Property", "Others"
     ];
 
     const specializations = [
-        "civil-debt", "cheque-bounce", "civil-litigation", "consumer-court",
-        "documentation", "recovery", "corporate-law", "arbitration", "banking-finance",
-        "startup", "tax", "trademark-copyright", "criminal-property", "criminal-litigation",
-        "cyber-crime", "landlord-tenant", "property", "revenue", "personal-family",
-        "child-custody", "divorce", "family-dispute", "labour-service",
-        "medical-negligence", "motor-accident", "muslim-law", "wills-trusts",
-        "others", "armed-forces", "immigration", "insurance", "international-law",
-        "notary", "property-redevelopment", "supreme-court"
+        "Civil Debt Recovery", "Cheque Bounce", "Civil Litigation", "Consumer Court", "Documentation",
+        "Corporate Law", "Arbitration", "Banking / Finance", "Startup", "Tax",
+        "Criminal Litigation", "Cyber Crime", "Landlord / Tenant", "Property", "Revenue",
+        "Child Custody", "Divorce", "Family Dispute", "Muslim Law", "Wills / Trusts",
+        "Labour Law", "Service Matters", "Medical Negligence", "Motor Accident",
+        "Trademark & Copyright", "Property Redevelopment",
+        "Armed Forces Tribunal", "Immigration", "Insurance", "International Law", "Notary",
+        "Supreme Court", "Others"
     ];
 
     return (
-        <div className="position-relative" >
+        <div className="position-relative">
             <div className="top-center-alert">
                 <CustomAlert message={alertMessage} onClose={() => setAlertMessage("")} />
             </div>
