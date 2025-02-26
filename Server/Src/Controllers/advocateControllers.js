@@ -503,10 +503,9 @@ exports.getJuniorAdvocatesByAdvocateEmail = async (req, res) => {
     try {
         const advocateEmail = req.user.email; // Get advocate email from middleware
 
-        // Fetch only pending requests for the logged-in advocate
         const jrAdvocates = await JrAdvocate.find({
             advocateemail: advocateEmail,
-            approvalStatus: 'pending'
+            // approvalStatus: 'pending'
         });
 
         res.json({ success: true, jrAdvocates });
