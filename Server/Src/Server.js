@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser')
 const adminRoute = require('./Routes/adminRoutes')
 const advocateRoute = require('./Routes/advocateRoute')
 const clientRoute = require('./Routes/clientRoute')
-const loginRoute = require('../Src/Routes/loginRoute')
+const loginRoute = require('./Routes/loginRoute')
 const caseCategoryRoutes = require('../Src/Routes/caseCategoryRoutes')
 const profileRoutes = require('../Src/Routes/profileRoutes')
 const evidenceRoutes = require ('../Src/Routes/evidenceRoutes')
@@ -34,7 +34,7 @@ app.use("/invoices", express.static("invoices"));
 // Connecting with front end ie, React
 
 const allowedOrigins = [
-  'http://localhost:5173', // Local dev
+  'http://localhost:5174', // Local dev
   'https://law-linker-client.vercel.app' // Frontend on Vercel
 ];
 
@@ -49,8 +49,12 @@ app.use(cors({
     }
   },
   credentials: true,
+  methods: "GET, POST, PUT, DELETE, OPTIONS",
+  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
 }));
 
+// Handle preflight requests
+app.options('*', cors()); 
 
 // Test route
 app.get("/", (req, res) => {
